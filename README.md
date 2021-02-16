@@ -1,10 +1,10 @@
 ### Build
 mvn compile
 
-###Docker
+### Docker
 docker-compose build
 
 docker-compose up
 
-###Documentation
+### Documentation
 http://localhost:8181/superheroes/api/v1/swagger-ui/
