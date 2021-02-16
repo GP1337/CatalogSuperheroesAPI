@@ -1,0 +1,16 @@
+version: '2'
+services:
+
+  mongo:
+    image: mongo:latest
+    restart: always
+
+  app:
+    build: ./
+    restart: always
+    volumes:
+      - ./_client/:/var/www/html/
+    links:
+      - mongo
+    ports:
+      - "8181:8181"
