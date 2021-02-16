@@ -52,7 +52,7 @@ public class ComicService {
 
             List<String> characterNameList = Arrays.asList(characters.split(","));
 
-            characterNameList.forEach(String::strip);
+            characterNameList.forEach(s -> s = s.strip());
 
             String regEx = StringUtils.collectionToDelimitedString(characterNameList, "|");
 
@@ -61,9 +61,7 @@ public class ComicService {
 
             List<Character> characterList = mongoTemplate.find(characterQuery, Character.class);
 
-            if (characterList.size() > 0) {
-                query.addCriteria(Criteria.where("characters").in(characterList));
-            }
+            query.addCriteria(Criteria.where("characters").in(characterList));
 
         }
 
