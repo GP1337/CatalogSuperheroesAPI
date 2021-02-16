@@ -33,8 +33,8 @@ public class CharacterController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<ResponseMessage<List<Character>>> getCharacterList(@RequestParam(required = false) String name, @RequestParam(required = false) String description,
-                                                            @RequestParam(required = false) String orderby, @RequestParam(required = false) String offset,
-                                                            @RequestParam(required = false) String limit){
+                                                                             @ApiParam(example = "name desc") @RequestParam(required = false) String orderby, @RequestParam(required = false) String offset,
+                                                                             @RequestParam(required = false) String limit) {
 
         Map<String, String> params = new HashMap<>();
         params.put("name", name);

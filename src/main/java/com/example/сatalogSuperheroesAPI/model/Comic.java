@@ -15,7 +15,6 @@ import java.util.List;
 
 @Data
 @Document(collection = "comics")
-//@ApiModel()
 public class Comic {
 
     @Id
@@ -34,11 +33,11 @@ public class Comic {
     @ApiModelProperty(notes = "Description of the comic")
     private String description;
 
-    @ApiModelProperty(notes = "Image of comic in base64")
+    @ApiModelProperty(notes = "Image of the comic in base64")
     private String imageDataBase64;
 
     @JsonProperty(value = "")
-    @ApiModelProperty(notes = "Format of image (jpg, png ...)")
+    @ApiModelProperty(notes = "Image format (jpg, png ...)")
     private String imageFormat;
 
 }

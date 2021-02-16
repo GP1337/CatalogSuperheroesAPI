@@ -6,6 +6,7 @@ import com.example.сatalogSuperheroesAPI.model.ResponseMessage;
 import com.example.сatalogSuperheroesAPI.service.CharacterService;
 import com.example.сatalogSuperheroesAPI.service.ComicCharacterRelationService;
 import com.example.сatalogSuperheroesAPI.service.ComicService;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,8 @@ public class ComicController {
 
     @GetMapping
     public ResponseEntity<ResponseMessage<List<Comic>>> getComicList(@RequestParam(required = false) String name, @RequestParam(required = false) String description,
-                                                        @RequestParam(required = false) String orderby, @RequestParam(required = false) String offset,
-                                                        @RequestParam(required = false) String limit, @RequestParam(required = false) String characters){
+                                                                     @ApiParam(example = "name desc") @RequestParam(required = false) String orderby, @RequestParam(required = false) String offset,
+                                                                     @RequestParam(required = false) String limit, @ApiParam(example = "Spiderman,Superman")@RequestParam(required = false) String characters){
 
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
