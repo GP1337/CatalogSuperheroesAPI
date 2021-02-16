@@ -15,6 +15,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/characters")
@@ -42,7 +43,7 @@ public class CharacterController {
         Character dbCharacter = characterService.getCharacterById(id);
 
         if (dbCharacter == null){
-            return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(dbCharacter.getClass(), id)), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(Character.class, id)), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity(new ResponseMessage(dbCharacter), HttpStatus.OK);
@@ -55,7 +56,7 @@ public class CharacterController {
         Character dbCharacter = characterService.getCharacterById(id);
 
         if (dbCharacter == null){
-            return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(dbCharacter.getClass(), id)), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(Character.class, id)), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity(new ResponseMessage(dbCharacter.getComics()), HttpStatus.OK);
@@ -71,11 +72,11 @@ public class CharacterController {
         List<String> errors = new ArrayList();
 
         if (character == null){
-            errors.add(ResponseMessage.getElementNotFoundMessage(character.getClass(), characterId));
+            errors.add(ResponseMessage.getElementNotFoundMessage(Character.class, characterId));
         }
 
         if (comic == null){
-            errors.add(ResponseMessage.getElementNotFoundMessage(comic.getClass(), comicId));
+            errors.add(ResponseMessage.getElementNotFoundMessage(Comic.class, comicId));
         }
 
         if (errors.size() > 0){
@@ -97,11 +98,11 @@ public class CharacterController {
         List<String> errors = new ArrayList();
 
         if (character == null){
-            errors.add(ResponseMessage.getElementNotFoundMessage(character.getClass(), characterId));
+            errors.add(ResponseMessage.getElementNotFoundMessage(Character.class, characterId));
         }
 
         if (comic == null){
-            errors.add(ResponseMessage.getElementNotFoundMessage(comic.getClass(), characterId));
+            errors.add(ResponseMessage.getElementNotFoundMessage(Comic.class, characterId));
         }
 
         if (errors.size() > 0){

@@ -42,7 +42,7 @@ public class ComicController {
         Comic dbComic = comicService.getComicById(id);
 
         if (dbComic == null){
-            return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(dbComic.getClass(), id)), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(Comic.class, id)), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity(new ResponseMessage(dbComic), HttpStatus.OK);
@@ -55,7 +55,7 @@ public class ComicController {
         Comic dbComic = comicService.getComicById(id);
 
         if (dbComic == null){
-            return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(dbComic.getClass(), id)), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(Comic.class, id)), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity(new ResponseMessage(dbComic.getCharacters()), HttpStatus.OK);
@@ -109,11 +109,11 @@ public class ComicController {
         List<String> errors = new ArrayList();
 
         if (character == null){
-            errors.add(ResponseMessage.getElementNotFoundMessage(character.getClass(), characterId));
+            errors.add(ResponseMessage.getElementNotFoundMessage(Character.class, characterId));
         }
 
         if (comic == null){
-            errors.add(ResponseMessage.getElementNotFoundMessage(comic.getClass(), comicId));
+            errors.add(ResponseMessage.getElementNotFoundMessage(Comic.class, comicId));
         }
 
         if (errors.size() > 0){
@@ -135,11 +135,11 @@ public class ComicController {
         List<String> errors = new ArrayList();
 
         if (character == null){
-            errors.add(ResponseMessage.getElementNotFoundMessage(character.getClass(), characterId));
+            errors.add(ResponseMessage.getElementNotFoundMessage(Character.class, characterId));
         }
 
         if (comic == null){
-            errors.add(ResponseMessage.getElementNotFoundMessage(comic.getClass(), characterId));
+            errors.add(ResponseMessage.getElementNotFoundMessage(Comic.class, characterId));
         }
 
         if (errors.size() > 0){

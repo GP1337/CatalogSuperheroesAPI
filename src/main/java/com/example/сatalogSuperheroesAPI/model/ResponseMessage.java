@@ -25,7 +25,7 @@ public class ResponseMessage<T> {
     }
 
     public static String getElementNotFoundMessage(Class pClass, BigInteger id) {
-        return pClass + " with id " + id + " not found";
+        return pClass.getSimpleName() + " with id " + id + " not found";
     }
 
     public static String getIdUnacceptableMessage() {
