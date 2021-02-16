@@ -1,14 +1,18 @@
 package com.example.сatalogSuperheroesAPI.service;
 
+import com.example.сatalogSuperheroesAPI.model.Character;
 import com.example.сatalogSuperheroesAPI.model.Comic;
 import com.example.сatalogSuperheroesAPI.repository.ComicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -99,9 +103,27 @@ public class ComicService {
 
     public Comic changeCharacterById(BigInteger id, Comic comic){
 
-        comic.setId(id);
+        Comic dbComic = getComicById(id);
 
-        return comicRepository.save(comic);
+        try {
+
+            for (Field field : comic.getClass().getDeclaredFields()) {
+
+                field.setAccessible(true);
+
+                if (field.isAnnotationPresent(Id.class) || field.isAnnotationPresent(DBRef.class) || field.get(comic) == null) {
+                    continue;
+                }
+
+                field.set(dbComic, field.get(comic));
+
+            }
+        }
+        catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return comicRepository.save(dbComic);
 
     }
 

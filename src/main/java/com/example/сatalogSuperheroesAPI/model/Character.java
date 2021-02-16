@@ -1,6 +1,7 @@
 package com.example.сatalogSuperheroesAPI.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -17,11 +18,16 @@ public class Character {
     @Id
     private BigInteger id;
 
-    private String name = "";
-    private String description = "";
+    @JsonProperty(value = "")
+    private String name;
+
+    @JsonProperty(value = "")
+    private String description;
 
     private String imageDataBase64;
-    private String imageFormat = "";
+
+    @JsonProperty(value = "")
+    private String imageFormat;
 
     @DBRef(lazy = true)
     @JsonIgnore

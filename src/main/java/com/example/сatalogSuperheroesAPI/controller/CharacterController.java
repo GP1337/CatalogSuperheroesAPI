@@ -115,7 +115,7 @@ public class CharacterController {
 
     }
 
-    @PostMapping
+    @PostMapping("/{id}")
     public ResponseEntity postCharacter(@RequestBody Character character, @PathVariable(required = false /*post can be used either to update or to create character*/) BigInteger id){
 
         if (character.getId() != null) {
@@ -140,7 +140,7 @@ public class CharacterController {
 
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity putCharacter(@RequestBody Character character, @PathVariable BigInteger id){
 
         if (character.getId() != null){

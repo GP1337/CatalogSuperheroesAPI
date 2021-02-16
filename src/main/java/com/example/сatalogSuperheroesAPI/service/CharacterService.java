@@ -2,13 +2,17 @@ package com.example.сatalogSuperheroesAPI.service;
 
 import com.example.сatalogSuperheroesAPI.model.Character;
 import com.example.сatalogSuperheroesAPI.repository.CharacterRepository;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,11 +112,28 @@ public class CharacterService {
 
     }
 
-    public Character changeCharacterById(BigInteger id, Character character){
+    public Character changeCharacterById(BigInteger id, Character character) {
 
-        character.setId(id);
+        Character dbCharacter = getCharacterById(id);
 
-        return characterRepository.save(character);
+        try {
+
+            for (Field field : character.getClass().getDeclaredFields()) {
+
+                field.setAccessible(true);
+
+                if (field.isAnnotationPresent(Id.class) || field.isAnnotationPresent(DBRef.class) || field.get(character) == null) {
+                    continue;
+                }
+
+                field.set(dbCharacter, field.get(character));
+
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return characterRepository.save(dbCharacter);
 
     }
 
