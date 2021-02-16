@@ -24,4 +24,7 @@ public class Comic {
     private String name = "";
     private String description = "";
 
+    private String imageDataBase64;
+    private String imageFormat = "";
+
 }
