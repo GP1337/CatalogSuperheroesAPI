@@ -1,6 +1,5 @@
 package com.example.сatalogSuperheroesAPI.service;
 
-import com.example.сatalogSuperheroesAPI.model.Character;
 import com.example.сatalogSuperheroesAPI.model.Comic;
 import com.example.сatalogSuperheroesAPI.repository.ComicRepository;
 import org.springframework.beans.factory.annotation.Autowired;

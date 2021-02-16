@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,14 +31,23 @@ public class ComicController {
     private ComicCharacterRelationService comicCharacterRelationService;
 
     @GetMapping
-    public ResponseEntity<List<Character>> getComicList(@RequestParam(required = false) Map<String, String> params){
+    public ResponseEntity<ResponseMessage<List<Comic>>> getComicList(@RequestParam(required = false) String name, @RequestParam(required = false) String description,
+                                                        @RequestParam(required = false) String orderby, @RequestParam(required = false) String offset,
+                                                        @RequestParam(required = false) String limit){
+
+        Map<String, String> params = new HashMap<>();
+        params.put("name", name);
+        params.put("description", description);
+        params.put("orderby", orderby);
+        params.put("offset", offset);
+        params.put("limit", limit);
 
         return new ResponseEntity(new ResponseMessage(comicService.getComicsList(params)), HttpStatus.OK);
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getComicById(@PathVariable BigInteger id){
+    public ResponseEntity<ResponseMessage<Character>> getComicById(@PathVariable BigInteger id){
 
         Comic dbComic = comicService.getComicById(id);
 
@@ -50,7 +60,7 @@ public class ComicController {
     }
 
     @GetMapping("/{id}/characters")
-    public ResponseEntity getComicsCharacters(@PathVariable BigInteger id){
+    public ResponseEntity<ResponseMessage<List<Character>>> getComicsCharacters(@PathVariable BigInteger id){
 
         Comic dbComic = comicService.getComicById(id);
 
@@ -63,32 +73,33 @@ public class ComicController {
     }
 
     @PostMapping
-    public ResponseEntity postComic(@RequestBody Comic comic, @PathVariable(required = false /*post can be used either to update or to create character*/) BigInteger id){
+    public ResponseEntity<ResponseMessage<Comic>> postComic(@RequestBody Comic comic){
 
         if (comic.getId() != null) {
             return new ResponseEntity(new ResponseMessage(ResponseMessage.getIdUnacceptableMessage()), HttpStatus.BAD_REQUEST);
         }
 
-        if (id != null) {
+        return new ResponseEntity(comicService.addComic(comic), HttpStatus.OK);
 
-            if (comicService.getComicById(id) == null){
-                return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(comic.getClass(), id)), HttpStatus.NOT_FOUND);
-            }
+    }
 
-            comicService.changeCharacterById(id, comic);
+    @PostMapping("/{id}")
+    public ResponseEntity<ResponseMessage<Comic>> postComicById(@RequestBody Comic comic, @PathVariable(required = false /*post can be used either to update or to create character*/) BigInteger id){
 
-            return new ResponseEntity(ResponseMessage.ResponsePostPutOk(), HttpStatus.OK);
-
+        if (comic.getId() != null) {
+            return new ResponseEntity(new ResponseMessage(ResponseMessage.getIdUnacceptableMessage()), HttpStatus.BAD_REQUEST);
         }
 
-        comicService.addComic(comic);
+        if (comicService.getComicById(id) == null) {
+            return new ResponseEntity(new ResponseMessage(ResponseMessage.getElementNotFoundMessage(comic.getClass(), id)), HttpStatus.NOT_FOUND);
+        }
 
-        return new ResponseEntity(ResponseMessage.ResponsePostPutOk(), HttpStatus.OK);
+        return new ResponseEntity(comicService.changeCharacterById(id, comic), HttpStatus.OK);
 
     }
 
     @PutMapping
-    public ResponseEntity putComic(@RequestBody Comic comic, @PathVariable BigInteger id){
+    public ResponseEntity<ResponseMessage<Comic>> putComic(@RequestBody Comic comic, @PathVariable BigInteger id){
 
         if (comic.getId() != null){
             return new ResponseEntity(new ResponseMessage(ResponseMessage.getIdUnacceptableMessage()), HttpStatus.BAD_REQUEST);
@@ -101,7 +112,7 @@ public class ComicController {
     }
 
     @PostMapping("/{comicId}/characters/{characterId}")
-    public ResponseEntity addCharactersComics(@PathVariable BigInteger comicId, @PathVariable BigInteger characterId){
+    public ResponseEntity<ResponseMessage> addComicCharacter(@PathVariable BigInteger comicId, @PathVariable BigInteger characterId){
 
         Character character = characterService.getCharacterById(characterId);
         Comic comic = comicService.getComicById(comicId);
@@ -127,7 +138,7 @@ public class ComicController {
     }
 
     @DeleteMapping("/{comicId}/characters/{characterId}")
-    public ResponseEntity removeCharactersComics(@PathVariable BigInteger comicId, @PathVariable BigInteger characterId){
+    public ResponseEntity<ResponseMessage> removeCharactersComics(@PathVariable BigInteger comicId, @PathVariable BigInteger characterId){
 
         Character character = characterService.getCharacterById(characterId);
         Comic comic = comicService.getComicById(comicId);
