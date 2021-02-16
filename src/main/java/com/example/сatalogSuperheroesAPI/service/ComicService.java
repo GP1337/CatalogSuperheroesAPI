@@ -1,6 +1,8 @@
 package com.example.сatalogSuperheroesAPI.service;
 
+import com.example.сatalogSuperheroesAPI.model.Character;
 import com.example.сatalogSuperheroesAPI.model.Comic;
+import com.example.сatalogSuperheroesAPI.repository.CharacterRepository;
 import com.example.сatalogSuperheroesAPI.repository.ComicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
@@ -10,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigInteger;
@@ -26,7 +29,6 @@ public class ComicService {
     @Autowired
     private ComicRepository comicRepository;
 
-
     public List<Comic> getComicsList(Map<String, String> params){
 
         if (params == null) {
@@ -42,6 +44,27 @@ public class ComicService {
             if (filterParam != null) {
                 query.addCriteria(Criteria.where(filterField).regex(filterParam));
             }
+        }
+
+        String characters = params.get("characters");
+        if (characters != null){
+
+
+            List<String> characterNameList = Arrays.asList(characters.split(","));
+
+            characterNameList.forEach(String::strip);
+
+            String regEx = StringUtils.collectionToDelimitedString(characterNameList, "|");
+
+            Query characterQuery = new Query();
+            characterQuery.addCriteria(Criteria.where("name").regex(regEx));
+
+            List<Character> characterList = mongoTemplate.find(characterQuery, Character.class);
+
+            if (characterList.size() > 0) {
+                query.addCriteria(Criteria.where("characters").in(characterList));
+            }
+
         }
 
         // handle ordering

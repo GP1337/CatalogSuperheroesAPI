@@ -33,7 +33,7 @@ public class ComicController {
     @GetMapping
     public ResponseEntity<ResponseMessage<List<Comic>>> getComicList(@RequestParam(required = false) String name, @RequestParam(required = false) String description,
                                                         @RequestParam(required = false) String orderby, @RequestParam(required = false) String offset,
-                                                        @RequestParam(required = false) String limit){
+                                                        @RequestParam(required = false) String limit, @RequestParam(required = false) String characters){
 
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
@@ -41,6 +41,7 @@ public class ComicController {
         params.put("orderby", orderby);
         params.put("offset", offset);
         params.put("limit", limit);
+        params.put("characters", characters);
 
         return new ResponseEntity(new ResponseMessage(comicService.getComicsList(params)), HttpStatus.OK);
 
